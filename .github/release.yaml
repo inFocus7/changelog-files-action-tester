@@ -1,0 +1,28 @@
+on:
+  release:
+    types: [created]
+
+jobs:
+  update-release-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Generate Changelog
+        id: changelog
+        uses: infocus7/changelog-files-action@8e2e29d262b687cdd85ce43a69c7c9e7ff605dca
+        with:
+          changelog-directory: 'changelogs-fun'
+          release-tag-name: ${{ github.ref_name }}
+      - name: Update Release Notes
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const releaseId = ${{ github.event.release.id }};
+            const changelog = ${{ steps.changelog.outputs.changelog }};
+            github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: releaseId,
+              body: changelog
+            });

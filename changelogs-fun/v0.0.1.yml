@@ -1,0 +1,12 @@
+enhancement:
+  - Testing the changelog
+security:
+  - Testing the changelog...
+ci:
+  - Testing the changelog ci
+  - boop a second.
+docs:
+  - no docs.
+bad:
+  - Testing the changelog that this fields does not exist.
+deprecated: {} # this also shouldn't print
