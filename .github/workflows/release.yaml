@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Generate Changelog
         id: changelog
-        uses: infocus7/changelog-files-action@8e2e29d262b687cdd85ce43a69c7c9e7ff605dca
+        uses: infocus7/changelog-files-action@3d6cb17e24fc7e9546d9a26137a31924ca77683c
         with:
           changelog-directory: 'changelogs-fun'
           release-tag-name: ${{ github.ref_name }}
