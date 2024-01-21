@@ -18,11 +18,12 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
+            repoOwner="${{ github.repository_owner }}"
+            repoName="${{ github.repository }}"
             const releaseId = ${{ github.event.release.id }};
             const changelog = ${{ steps.changelog.outputs.changelog }};
-            github.rest.repos.updateRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              release_id: releaseId,
-              body: changelog
-            });
+            curl -X PATCH \
+              -H "Accept: application/vnd.github.v3+json" \
+              -H "Authorization: token $github-token" \
+              "https://api.github.com/repos/$repoOwner/$repoName/releases/$releaseId" \
+              -d "$changelog"
