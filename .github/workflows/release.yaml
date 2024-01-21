@@ -21,6 +21,9 @@ jobs:
           REPO_NAME: ${{ github.repository }}
           RELEASE_ID: ${{ github.event.release.id }}
         run: |
+          echo $RELEASE_ID
+          echo $REPO_OWNER
+          echo $REPO_NAME
           curl -X PATCH \
             -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: token $GITHUB_TOKEN" \
