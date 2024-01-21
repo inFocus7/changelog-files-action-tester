@@ -17,7 +17,6 @@ jobs:
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.repository }}
           RELEASE_ID: ${{ github.event.release.id }}
         run: |
@@ -27,5 +26,5 @@ jobs:
           curl -X PATCH \
             -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: token $GITHUB_TOKEN" \
-            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/releases/$RELEASE_ID" \
+            "https://api.github.com/repos/$REPO_NAME/releases/$RELEASE_ID" \
             -d "${{ steps.changelog.outputs.changelog }}"
