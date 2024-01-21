@@ -9,10 +9,14 @@ jobs:
       - uses: actions/checkout@v2
       - name: Generate Changelog
         id: changelog
-        uses: infocus7/changelog-files-action@65a15c5cb271b3ded5dd2577cbf880a48203a6b4
+        uses: infocus7/changelog-files-action@bc46c8ec942d5ac4a73c163d28414d604f016c38
         with:
           changelog-directory: 'changelogs-fun'
           release-tag-name: ${{ github.ref_name }}
+      - name: Download Changelog
+        uses: actions/download-artifact@v2
+        with:
+          name: changelog
       - name: Update Release Notes
         shell: bash
         env:
@@ -20,8 +24,9 @@ jobs:
           REPO_NAME: ${{ github.repository }}
           RELEASE_ID: ${{ github.event.release.id }}
         run: |
+          changelog_content=$(jq -Rs . < changelog_output.md)
           curl -L -X PATCH \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
             "https://api.github.com/repos/$REPO_NAME/releases/$RELEASE_ID" \
-            -d '{"body":"${{ steps.changelog.outputs.changelog }}"}'
+            -d '{"body": "$changelog_content"}'
