@@ -14,16 +14,16 @@ jobs:
           changelog-directory: 'changelogs-fun'
           release-tag-name: ${{ github.ref_name }}
       - name: Update Release Notes
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            repoOwner="${{ github.repository_owner }}"
-            repoName="${{ github.repository }}"
-            const releaseId = ${{ github.event.release.id }};
-            const changelog = ${{ steps.changelog.outputs.changelog }};
-            curl -X PATCH \
-              -H "Accept: application/vnd.github.v3+json" \
-              -H "Authorization: token $github-token" \
-              "https://api.github.com/repos/$repoOwner/$repoName/releases/$releaseId" \
-              -d "$changelog"
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.repository }}
+          RELEASE_ID: ${{ github.event.release.id }}
+        run: |
+          const changelog = ${{ steps.changelog.outputs.changelog }};
+          curl -X PATCH \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/releases/$RELEASE_ID" \
+            -d "$changelog"
