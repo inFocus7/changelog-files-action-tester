@@ -24,4 +24,4 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
             "https://api.github.com/repos/$REPO_NAME/releases/$RELEASE_ID" \
-            -d '{"body":${{ steps.changelog.outputs.changelog }}}'
+            -d '{"body":"${{ steps.changelog.outputs.changelog }}"}'
